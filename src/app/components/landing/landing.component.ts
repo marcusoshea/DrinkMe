@@ -12,24 +12,16 @@ import { LogOut } from '../../store/actions/auth.actions';
   styleUrls: ['./landing.component.scss']
 })
 export class LandingComponent implements OnInit {
-
-  getState: Observable<any>;
   isAuthenticated: boolean = false;
-  user = null;
   errorMessage = null;
 
-  constructor(
-    private store: Store<AppState>
-  ) {
-    this.getState = this.store.select(selectAuthState);
-  }
+  constructor(private store: Store<AppState>) { }
 
   ngOnInit() {
-    this.getState.subscribe((state) => {
-      this.isAuthenticated = state.isAuthenticated;
-      this.user = state.user;
-      this.errorMessage = state.errorMessage;
-    });
+
+    if (localStorage.getItem('token')) {
+      this.isAuthenticated = true;
+    }
   }
 
   logOut(): void {

@@ -16,7 +16,9 @@ import { StatusComponent } from './components/status/status.component';
 import { AuthService } from './services/auth.service';
 import { AuthEffects } from './store/effects/auth.effects';
 import { reducers } from './store/app.states';
-
+import { APP_INITIALIZER } from '@angular/core';
+import { AppConfigService } from './services/app-config.service';
+import { AuthGuardService } from './services/auth-guard.service';
 import {
   TokenInterceptor, ErrorInterceptor
 } from './services/token.interceptor';
@@ -39,6 +41,7 @@ import {
   ],
   providers: [
     AuthService,
+    AuthGuardService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
@@ -48,6 +51,16 @@ import {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorInterceptor,
       multi: true
+    },
+    {
+      provide: APP_INITIALIZER,
+      multi: true,
+      deps: [AppConfigService],
+      useFactory: (appConfigService: AppConfigService) => {
+        return () => {
+          return appConfigService.loadAppConfig();
+        };
+      }
     }
   ],
   bootstrap: [AppComponent]

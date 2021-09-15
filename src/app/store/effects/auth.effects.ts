@@ -31,7 +31,6 @@ export class AuthEffects {
       switchMap(payload => {
         return this.authService.logIn(payload.username, payload.password).pipe(
           map((user) => {
-
             return new LogInSuccess({ token: user.token, username: user.username, firstName: user.firstName, lastName: user.lastName });
           }),
           catchError((error) => {
@@ -58,7 +57,6 @@ export class AuthEffects {
     ofType(AuthActionTypes.LOGIN_FAILURE)
   );
 
-  //TODO: -> UPDATE API TO RETURN THIS INFO UPON SUCCESSFULLY SIGNINGUP, ALSO ADD NEW ENDPOINT FOR THIS.
   SignUp = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActionTypes.SIGNUP),
@@ -100,6 +98,7 @@ export class AuthEffects {
       localStorage.removeItem('username');
       localStorage.removeItem('firstName');
       localStorage.removeItem('lastName');
+      this.router.navigateByUrl('/log-in');
     })
   );
 

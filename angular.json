@@ -32,7 +32,7 @@
             ],
             "styles": [
               "src/styles.scss",
-             "bootstrap/dist/css/bootstrap.css"
+              "bootstrap/dist/css/bootstrap.css"
             ],
             "scripts": [
               "bootstrap/dist/js/bootstrap.min.js"
@@ -102,7 +102,7 @@
               "src/assets"
             ],
             "styles": [
-              "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.scss"
             ],
             "scripts": []

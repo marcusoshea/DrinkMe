@@ -1,37 +1,40 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
+import { Store } from '@ngrx/store';
 import { User } from '../models/user';
+import { AppConfigService } from './app-config.service';
+import { AppState } from '../store/app.states';
+import { LogOut } from '../store/actions/auth.actions';
 
 
 @Injectable()
 export class AuthService {
-  //TODO: Move this to config, shouldn't be hardcoded.
-  private BASE_URL = 'http://drinkapi.imaginedthenmade.com:8001/pokeapi';
+  constructor(private http: HttpClient, private appConfigService: AppConfigService, private store: Store<AppState>) { }
 
-  constructor(private http: HttpClient) {}
 
+  
   getToken(): string {
-      let currentToken = localStorage.getItem('token');
-      if (currentToken) {
-        return currentToken;
-      } 
-      return '';
+    let currentToken = localStorage.getItem('token');
+    if (currentToken) {
+      return currentToken;
+    }    
+    this.store.dispatch(new LogOut);
+    return '';
   }
 
   logIn(username: string, password: string): Observable<any> {
-    const url = `${this.BASE_URL}/Users/authenticate`;
-    return this.http.post<User>(url, {"username": username, "password": password});
+    const url = `${this.appConfigService.apiBaseUrl}/Users/authenticate`;
+    return this.http.post<User>(url, { "username": username, "password": password });
   }
 
   signUp(username: string, password: string, firstName: string, lastName: string): Observable<User> {
-    const url = `${this.BASE_URL}/Users/register`;
-    return this.http.post<User>(url, {"firstName": firstName, "lastName": lastName, "username": username, "password": password});
+    const url = `${this.appConfigService.apiBaseUrl}/Users/register`;
+    return this.http.post<User>(url, { "firstName": firstName, "lastName": lastName, "username": username, "password": password });
   }
 
   getStatus(): Observable<User> {
-    const url = `${this.BASE_URL}/status`;
+    const url = `${this.appConfigService.apiBaseUrl}/status`;
     return this.http.get<User>(url);
   }
 }

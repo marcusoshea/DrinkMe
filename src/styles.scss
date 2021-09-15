@@ -1,1 +1,32 @@
-/* You can add global styles to this file, and also import other style files */
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/buttons";
+
+//color palette
+// light blue #00cedf
+// turquoise #1b879d
+// purple #6f2ab1
+// red #be271b
+// yellow #e6ca29
+
+body {
+    background-color: #1b879d !important;
+    height: 100%;
+    width: 100%;
+    font-family: 'Alice' !important;
+}
+
+.card{
+    background-color: #ffffff !important;
+}
+.btn-primary {
+    background-color: #6f2ab1 !important;
+    border-color: #00cedf !important;
+    font-family: 'Alice' !important;
+}
+.btn-success{
+    background-color: #e6ca29 !important;
+    border-color: #00cedf !important;
+}
