@@ -19,9 +19,8 @@ import { reducers } from './store/app.states';
 import { APP_INITIALIZER } from '@angular/core';
 import { AppConfigService } from './services/app-config.service';
 import { AuthGuardService } from './services/auth-guard.service';
-import {
-  TokenInterceptor, ErrorInterceptor
-} from './services/token.interceptor';
+import { TokenInterceptor, ErrorInterceptor} from './services/token.interceptor';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +28,8 @@ import {
     LandingComponent,
     SignUpComponent,
     LogInComponent,
-    StatusComponent
+    StatusComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,

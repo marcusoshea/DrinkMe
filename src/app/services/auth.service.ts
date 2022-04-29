@@ -11,8 +11,6 @@ import { LogOut } from '../store/actions/auth.actions';
 @Injectable()
 export class AuthService {
   constructor(private http: HttpClient, private appConfigService: AppConfigService, private store: Store<AppState>) { }
-
-
   
   getToken(): string {
     let currentToken = localStorage.getItem('token');
@@ -31,6 +29,11 @@ export class AuthService {
   signUp(username: string, password: string, firstName: string, lastName: string): Observable<User> {
     const url = `${this.appConfigService.apiBaseUrl}/Users/register`;
     return this.http.post<User>(url, { "firstName": firstName, "lastName": lastName, "username": username, "password": password });
+  }
+
+  forgotPassword(email: string): Observable<any> {
+    const url = `${this.appConfigService.apiBaseUrl}/Users/forgot-password`;
+    return this.http.post<any>(url, { "email": email });
   }
 
   getStatus(): Observable<User> {

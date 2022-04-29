@@ -10,7 +10,7 @@ import {
   AuthActionTypes,
   LogIn, LogInSuccess, LogInFailure,
   SignUp, SignUpSuccess, SignUpFailure,
-  LogOut,
+  LogOut, ForgotPassword
 } from '../actions/auth.actions';
 
 
@@ -72,6 +72,22 @@ export class AuthEffects {
       })
     )
   ); 
+
+  ForgotPassword = createEffect(() =>
+  this.actions$.pipe(
+    ofType(AuthActionTypes.FORGOT_PASSWORD),
+    map((action: ForgotPassword) => action.payload),
+    switchMap(payload => {
+      return this.authService.forgotPassword(payload.username).pipe(
+        map((user) => {
+          return user;
+        }),
+        catchError((error) => {
+          return error;
+        }));
+    })
+  )
+); 
 
   @Effect({ dispatch: false })
   SignUpSuccess: Observable<any> = this.actions.pipe(
