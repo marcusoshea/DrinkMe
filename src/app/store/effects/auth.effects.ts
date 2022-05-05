@@ -40,8 +40,8 @@ export class AuthEffects {
     )
   );
 
-  @Effect({ dispatch: false })
-  LogInSuccess: Observable<any> = this.actions.pipe(
+  LogInSuccess = createEffect(() =>
+  this.actions.pipe(
     ofType(AuthActionTypes.LOGIN_SUCCESS),
     tap((user: any) => {
       localStorage.setItem('token', user.payload.token);
@@ -50,12 +50,14 @@ export class AuthEffects {
       localStorage.setItem('lastName', user.payload.lastName);
       this.router.navigateByUrl('/');
     })
-  );
+  ), { dispatch: false });
+  
 
-  @Effect({ dispatch: false })
-  LogInFailure: Observable<any> = this.actions.pipe(
+  LogInFailure = createEffect(() =>
+  this.actions.pipe(
     ofType(AuthActionTypes.LOGIN_FAILURE)
-  );
+  ), { dispatch: false });
+
 
   SignUp = createEffect(() =>
     this.actions$.pipe(
@@ -67,55 +69,59 @@ export class AuthEffects {
             return new SignUpSuccess({ token: user.token, username: user.username, firstName: user.firstName, lastName: user.lastName });
           }),
           catchError((error) => {
+            console.log(error);
             return of(new SignUpFailure({ error: error }));
           }));
       })
     )
-  ); 
+  );
 
+  //TODO need to add a return action, this is working but popping an error in console, need to create ForgotPasswordSuccess/ForgotPasswordFailure like Signup pattern
   ForgotPassword = createEffect(() =>
-  this.actions$.pipe(
-    ofType(AuthActionTypes.FORGOT_PASSWORD),
-    map((action: ForgotPassword) => action.payload),
-    switchMap(payload => {
-      return this.authService.forgotPassword(payload.username).pipe(
-        map((user) => {
-          return user;
-        }),
-        catchError((error) => {
-          return error;
-        }));
-    })
-  )
-); 
-
-  @Effect({ dispatch: false })
-  SignUpSuccess: Observable<any> = this.actions.pipe(
-    ofType(AuthActionTypes.SIGNUP_SUCCESS),
-    tap((user: any) => {
-      localStorage.setItem('token', user.payload.token);
-      localStorage.setItem('username', user.payload.username);
-      localStorage.setItem('firstName', user.payload.firstName);
-      localStorage.setItem('lastName', user.payload.lastName);
-      this.router.navigateByUrl('/');
-    })
+    this.actions$.pipe(
+      ofType(AuthActionTypes.FORGOT_PASSWORD),
+      map((action: ForgotPassword) => action.payload),
+      switchMap(payload => {
+        return this.authService.forgotPassword(payload.username).pipe(
+          map((user) => {
+            console.log(user);
+            return user;
+          }),
+          catchError((error) => {
+            console.log(error);
+            return error;
+          }));
+      })
+    )
   );
 
-  @Effect({ dispatch: false })
-  SignUpFailure: Observable<any> = this.actions.pipe(
-    ofType(AuthActionTypes.SIGNUP_FAILURE)
-  );
+  SignUpSuccess = createEffect(() =>
+    this.actions.pipe(
+      ofType(AuthActionTypes.SIGNUP_SUCCESS),
+      tap((user: any) => {
+        localStorage.setItem('token', user.payload.token);
+        localStorage.setItem('username', user.payload.username);
+        localStorage.setItem('firstName', user.payload.firstName);
+        localStorage.setItem('lastName', user.payload.lastName);
+        this.router.navigateByUrl('/');
+      })
+    ), { dispatch: false });
 
-  @Effect({ dispatch: false })
-  LogOut: Observable<any> = this.actions.pipe(
-    ofType(AuthActionTypes.LOGOUT),
-    tap(() => {
-      localStorage.removeItem('token');
-      localStorage.removeItem('username');
-      localStorage.removeItem('firstName');
-      localStorage.removeItem('lastName');
-      this.router.navigateByUrl('/log-in');
-    })
-  );
+  SignUpFailure = createEffect(() =>
+    this.actions.pipe(
+      ofType(AuthActionTypes.SIGNUP_FAILURE)
+    ), { dispatch: false });
 
+
+  LogOut = createEffect(() =>
+    this.actions.pipe(
+      ofType(AuthActionTypes.LOGOUT),
+      tap(() => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('username');
+        localStorage.removeItem('firstName');
+        localStorage.removeItem('lastName');
+        this.router.navigateByUrl('/log-in');
+      }))
+    , { dispatch: false });
 }
